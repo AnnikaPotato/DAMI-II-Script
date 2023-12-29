@@ -92,7 +92,7 @@ print('RF')
 for i in range(1, 10):
     print(i)
     rf = RandomForestClassifier(n_estimators=100, max_depth=i,
-                                      random_state=RANDOM_SEED)
+                                      random_state=RANDOM_SEED, n_jobs=-1)
     rf.fit(X_Train, y_Train)
     y_Pred = rf.predict(X_Test)
     aucScore = roc_auc_score(y_Test, rf.predict_proba(X_Test)[:, 1])
