@@ -1,10 +1,27 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
+
 RANDOM_SEED = 938773
+
+MIN_DEPTH = 1
+MAX_DEPTH = 10
+INTERVAL_DEPTH = 1
+
+C_EXP = 6
+
 CONSUFION_MATRIX = (('TP', 'FN'), ('FP', 'TN'))
 NP_NUM_FILE_PATH = 'resultStatistic_NoPre.txt'
 NP_FRAUDULENT_CLASSES_PATH = 'fraudulent_NoPre.txt'
 
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, roc_auc_score
+P_NUM_FILE_PATH = None
+P_FRAUDULENT_CLASSES_PATH = None
 
 def writeToFile(path: str, mode: str, content: str) -> None:
     with open(path, mode) as fhand:
