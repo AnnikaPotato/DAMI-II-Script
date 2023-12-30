@@ -14,14 +14,11 @@ MIN_DEPTH = 1
 MAX_DEPTH = 10
 INTERVAL_DEPTH = 1
 
-C_EXP = 6
+C_EXP = 5
 
 CONSUFION_MATRIX = (('TP', 'FN'), ('FP', 'TN'))
 NP_NUM_FILE_PATH = 'resultStatistic_NoPre.txt'
 NP_FRAUDULENT_CLASSES_PATH = 'fraudulent_NoPre.txt'
-
-P_NUM_FILE_PATH = None
-P_FRAUDULENT_CLASSES_PATH = None
 
 def writeToFile(path: str, mode: str, content: str) -> None:
     with open(path, mode) as fhand:
