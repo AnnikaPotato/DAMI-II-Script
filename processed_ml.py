@@ -6,6 +6,8 @@ class Runner:
         self.X_Test = None
         self.y_Train = None
         self.y_Test = None
+        self.P_FRAUDULENT_CLASSES_PATH = None
+        self.P_NUM_FILE_PATH = None
         pass
 
     def set(self, X_Train, X_Test, y_Train, y_Test, filesuffix) -> None:
@@ -13,8 +15,8 @@ class Runner:
         self.X_Test = X_Test
         self.y_Train = y_Train
         self.y_Test = y_Test
-        P_FRAUDULENT_CLASSES_PATH = f'resultStatistic_P_{filesuffix}'
-        P_NUM_FILE_PATH = f'fraudulent_P_{filesuffix}'
+        self.P_FRAUDULENT_CLASSES_PATH = f'fraudulent_P_{filesuffix}.txt'
+        self.P_NUM_FILE_PATH = f'resultStatistic_P_{filesuffix}.txt'
         return
     
     def run(self) -> None:
@@ -24,10 +26,11 @@ class Runner:
         return
     
     def runGBDT(self) -> None:
-        with open(P_NUM_FILE_PATH, 'w') as fhand:
+        print('GBDT')
+        with open(self.P_NUM_FILE_PATH, 'w') as fhand:
             fhand.write(f'=======\ngradient boosted decision tree:\n')
 
-        with open(P_FRAUDULENT_CLASSES_PATH, 'w') as fhand:
+        with open(self.P_FRAUDULENT_CLASSES_PATH, 'w') as fhand:
             fhand.write(f'=======\ngradient boosted decision tree:\n')
         
         for i in range(MIN_DEPTH, MAX_DEPTH + INTERVAL_DEPTH, INTERVAL_DEPTH):
@@ -38,12 +41,12 @@ class Runner:
             y_Pred = gbdt.predict(self.X_Test)
             aucScore = roc_auc_score(self.y_Test, gbdt.predict_proba(self.X_Test)[:, 1])
 
-            writeToFile(P_FRAUDULENT_CLASSES_PATH, 'a',
+            writeToFile(self.P_FRAUDULENT_CLASSES_PATH, 'a',
                         getFraudulentClass(
                             f'max_depth = {i}\n',
                             np.where(y_Pred == 1)))
 
-            writeToFile(P_NUM_FILE_PATH, 'a',
+            writeToFile(self.P_NUM_FILE_PATH, 'a',
                         getStatistic(
                             f'max_depth = {i}\n',
                             aucScore,
@@ -51,10 +54,11 @@ class Runner:
                             y_Pred))
 
     def runLR(self) -> None:
-        with open(P_NUM_FILE_PATH, 'a') as fhand:
+        print('LR')
+        with open(self.P_NUM_FILE_PATH, 'a') as fhand:
             fhand.write(f'\n=======\nlogistic regression:\n')
 
-        with open(P_FRAUDULENT_CLASSES_PATH, 'a') as fhand:
+        with open(self.P_FRAUDULENT_CLASSES_PATH, 'a') as fhand:
             fhand.write(f'\n=======\nlogistic regression:\n')
 
         for i in range(0, C_EXP):
@@ -66,12 +70,12 @@ class Runner:
             y_Pred = lr.predict(self.X_Test)
             aucScore = roc_auc_score(self.y_Test, lr.predict_proba(self.X_Test)[:, 1])
 
-            writeToFile(NP_FRAUDULENT_CLASSES_PATH, 'a',
+            writeToFile(self.P_FRAUDULENT_CLASSES_PATH, 'a',
                         getFraudulentClass(
                             f'C = {c} \n',
                             np.where(y_Pred == 1)))
 
-            writeToFile(NP_NUM_FILE_PATH, 'a',
+            writeToFile(self.P_NUM_FILE_PATH, 'a',
                         getStatistic(
                             f'C = {c} \n', 
                             aucScore,
@@ -79,10 +83,10 @@ class Runner:
                             y_Pred))  
             
     def runRF(self):
-        with open(P_NUM_FILE_PATH, 'a') as fhand:
+        with open(self.P_NUM_FILE_PATH, 'a') as fhand:
             fhand.write(f'=======\nrandom forest:\n')
 
-        with open(P_FRAUDULENT_CLASSES_PATH, 'a') as fhand:
+        with open(self.P_FRAUDULENT_CLASSES_PATH, 'a') as fhand:
             fhand.write(f'=======\nrandom forest:\n')
 
         print('RF')
@@ -94,12 +98,12 @@ class Runner:
             y_Pred = rf.predict(self.X_Test)
             aucScore = roc_auc_score(self.y_Test, rf.predict_proba(self.X_Test)[:, 1])
 
-            writeToFile(NP_FRAUDULENT_CLASSES_PATH, 'a',
+            writeToFile(self.P_FRAUDULENT_CLASSES_PATH, 'a',
                         getFraudulentClass(
                             f'max_depth = {i}\n',
                             np.where(y_Pred == 1)))
 
-            writeToFile(NP_NUM_FILE_PATH, 'a',
+            writeToFile(self.P_NUM_FILE_PATH, 'a',
                         getStatistic(
                             f'max_depth = {i}\n',
                             aucScore,
