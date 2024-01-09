@@ -39,9 +39,9 @@ def getStatistic(header: str, aucScore: float, y_Test, y_Pred) -> str:
     toWrite.append('\n')
 
     toWrite.append(f'\tAccuracy: {accuracy_score(y_Test, y_Pred)}\n')
-    toWrite.append(f'\tPrecision: {precision_score(y_Test, y_Pred)}\n')
-    toWrite.append(f'\tRecall: {recall_score(y_Test, y_Pred)}\n')
-    toWrite.append(f'\tF1: {f1_score(y_Test, y_Pred)}\n')
+    toWrite.append(f'\tPrecision: {precision_score(y_Test, y_Pred, average="binary", pos_label=0)}\n')
+    toWrite.append(f'\tRecall: {recall_score(y_Test, y_Pred, average="binary", pos_label=0)}\n')
+    toWrite.append(f'\tF1: {f1_score(y_Test, y_Pred , average="binary", pos_label=0)}\n')
     toWrite.append(f'\tAUC:\t{aucScore}\n')
     toWrite.append('\n')
 
