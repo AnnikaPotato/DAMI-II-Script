@@ -15,6 +15,7 @@ ori_X = data.iloc[:, : -1]
 ori_y = data.iloc[:, -1]
 standarizedAll = pd.DataFrame(StandardScaler().fit(ori_X).transform(ori_X), columns = ori_X.columns[:])
 runner = Runner()
+totalIndices = [i for i in range(len(standarizedAll))]
 
 for i in [1, 5, 10, 50, 100]:
     size = i * FRAUD_TRANSACTION
@@ -26,8 +27,11 @@ for i in [1, 5, 10, 50, 100]:
     X = shuffledArray.iloc[:, : -1]
     y = shuffledArray.iloc[:, -1]
     XStandard = pd.DataFrame(StandardScaler().fit(X).transform(X), columns = X.columns[:])
-    X_Train, X_Test, y_Train, y_Test = train_test_split(XStandard, y, test_size=0.3, 
+    X_Train, _, y_Train, _ = train_test_split(XStandard, y, test_size=0.3, 
                                                         random_state=RANDOM_SEED, stratify=y)
+    notSelectedIndex = np.setdiff1d(totalIndices, X_Train.index, assume_unique=True)
+    X_Test = standarizedAll.iloc[notSelectedIndex, :]
+    y_Test = ori_y[notSelectedIndex]
 
     runner.set(X_Train, X_Test, y_Train, y_Test, f'us_{i}')
     runner.run()
